@@ -145,6 +145,25 @@ public final class ClanManager {
         SimpleClans.getInstance().getServer().getPluginManager().callEvent(new CreateClanEvent(clan));
     }
 
+    public void renameClanTag(Clan clan, String newTag) {
+        clan.setTag(newTag);
+        plugin.getStorageManager().updateClan(clan);
+        for (ClanPlayer cp : clan.getMembers()) {
+            plugin.getStorageManager().updateClanPlayer(cp);
+        }
+        for (String allyName : clan.getAllies()) {
+            Clan allyClan = getClan(allyName);
+            plugin.getStorageManager().updateClan(allyClan);
+        }
+        for (String rivalName : clan.getRivals()) {
+            Clan rivalClan = getClan(rivalName);
+            plugin.getStorageManager().updateClan(rivalClan);
+        }
+        for (ClanPlayer ally : clan.getAllAllyMembers()) {
+            plugin.getStorageManager().updateClanPlayer(ally);
+        }
+    }
+
     /**
      * Reset a player's KDR
      */

@@ -46,6 +46,11 @@ public class CreateClanTagPrompt extends StringPrompt {
 
     @Nullable
     private Prompt validateTag(SimpleClans plugin, Player player, @NotNull String clanTag) {
+        if (clanTag.contains(" ")) {
+            return new MessagePromptImpl(ChatColor.RED +
+                    lang("your.clan.tag.cannot.contain.spaces", player), this);
+        }
+
         String cleanTag = ChatUtils.stripColors(clanTag);
         if (plugin.getClanManager().isClan(cleanTag)) {
             return new MessagePromptImpl(ChatColor.RED +

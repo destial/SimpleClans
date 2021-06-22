@@ -68,9 +68,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         this.lastUsed = (new Date()).getTime();
         this.verified = verified;
         this.capeUrl = "";
-        if (SimpleClans.getInstance().getSettingsManager().isClanFFOnByDefault()) {
-            friendlyFire = true;
-        }
+        friendlyFire = SimpleClans.getInstance().getSettingsManager().isClanFFOnByDefault();
     }
 
     @Override
@@ -167,6 +165,11 @@ public class Clan implements Serializable, Comparable<Clan> {
     @Placeholder("name")
     public String getName() {
         return name;
+    }
+
+    @Placeholder("discord_format")
+    public String getDiscordFormat() {
+        return "*" + tag + "*";
     }
 
     /**
