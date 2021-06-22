@@ -338,6 +338,11 @@ public final class ClanManager {
     @SuppressWarnings("deprecation")
     @Nullable
     public ClanPlayer getAnyClanPlayer(String playerName) {
+        for (ClanPlayer cp : getAllClanPlayers()) {
+            if (cp.getName().equals(playerName)) {
+                return cp;
+            }
+        }
         return getAnyClanPlayer(Bukkit.getOfflinePlayer(playerName).getUniqueId());
     }
 
@@ -593,7 +598,7 @@ public final class ClanManager {
         }
 
         if (out.length() == 0) {
-            out = ChatColor.BLACK + "None";
+            out = lang("none", player);
         }
 
         return out;
@@ -664,7 +669,7 @@ public final class ClanManager {
         }
 
         if (out.length() == 0) {
-            out = ChatColor.BLACK + "None";
+            out = lang("none", player);
         }
 
         return out;
@@ -752,7 +757,7 @@ public final class ClanManager {
         count += getFoodPoints(inv, XMaterial.COOKED_BEEF, 8, 12.8);
 
         if (count == 0) {
-            return ChatColor.BLACK + lang("none", player);
+            return lang("none", player);
         } else {
             return ((int) count) + "" + ChatColor.GOLD + "p";
         }
@@ -1247,7 +1252,7 @@ public final class ClanManager {
      * Processes a ally chat command
      */
     public void processAllyChat(Player player, final String msg) {
-        final ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+        final ClanPlayer cp = getClanPlayer(player);
 
         if (cp == null) {
             return;
@@ -1304,11 +1309,10 @@ public final class ClanManager {
                     String message = Helper.formatAllyChat(cp, ce.getMessage(), ce.getPlaceholders());
                     plugin.getLogger().info(message);
 
-                    Player self = cp.toPlayer();
-                    ChatBlock.sendMessage(self, message);
+                    ChatBlock.sendMessage(cp, message);
 
                     for (ClanPlayer p : ce.getReceivers()) {
-                        ChatBlock.sendMessage(p.toPlayer(), message);
+                        ChatBlock.sendMessage(p, message);
                     }
                 }
             }.runTask(plugin);
